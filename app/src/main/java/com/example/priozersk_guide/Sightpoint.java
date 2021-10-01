@@ -21,6 +21,7 @@ public class Sightpoint extends AppCompatActivity {
             getWindow().getAttributes().layoutInDisplayCutoutMode =
                     WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
+
         WebView panorama = findViewById(R.id.Web);
         panorama.getSettings().setJavaScriptEnabled(true);
         panorama.loadUrl("http://cy74393.tmweb.ru/" + idOfActivatedMarker + ".html");
