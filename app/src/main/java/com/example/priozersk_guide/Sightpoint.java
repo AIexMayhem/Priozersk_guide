@@ -15,7 +15,6 @@ public class Sightpoint extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sightpoint);
         Intent sight = getIntent();
-
         String idOfActivatedMarker = sight.getStringExtra("id_of_point");
         hideSystemUI();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

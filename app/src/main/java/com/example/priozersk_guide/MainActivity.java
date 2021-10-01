@@ -38,7 +38,6 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 public class MainActivity extends AppCompatActivity implements
         OnMapReadyCallback, MapboxMap.OnMapClickListener {
 
-
     private static final String KORELA_FORTRESS_ID = "korela", TANK_ID = "tank";
 
 
