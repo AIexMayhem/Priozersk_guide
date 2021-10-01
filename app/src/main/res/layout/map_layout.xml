@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:background="@android:color/transparent"
     tools:context=".MainActivity">
 
@@ -13,21 +14,19 @@
         android:layout_height="match_parent"
         mapbox:mapbox_cameraTargetLat="61.0362"
         mapbox:mapbox_cameraTargetLng="30.1132"
-        mapbox:mapbox_cameraZoom="12.5" />
+        mapbox:mapbox_cameraZoom="12.5" >
+    </com.mapbox.mapboxsdk.maps.MapView>
 
     <Button
-
+        android:id="@+id/findPriozerskButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/findPriozerskButton"
-        android:text="@string/find_Priozersk"
-        android:onClick="setDefaultCameraPosition"
-        android:background="@drawable/shape_oval"
-        android:textColor="@color/black"
-        android:textSize="9sp"
         android:layout_margin="5dp"
-        android:paddingHorizontal="10dp" />
-
-
+        android:background="@drawable/shape_oval"
+        android:onClick="setDefaultCameraPosition"
+        android:paddingHorizontal="10dp"
+        android:text="@string/find_Priozersk"
+        android:textColor="@color/black"
+        android:textSize="9sp" />
 
 </FrameLayout>

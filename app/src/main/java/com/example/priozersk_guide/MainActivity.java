@@ -1,19 +1,19 @@
 package com.example.priozersk_guide;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
-import android.webkit.WebView;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
@@ -38,25 +38,23 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 public class MainActivity extends AppCompatActivity implements
         OnMapReadyCallback, MapboxMap.OnMapClickListener {
 
-    private int peekHeight;
 
-    private static final String KORELA_FORTRESS_ID = "korelaId";
+    private static final String KORELA_FORTRESS_ID = "korela", TANK_ID = "tank";
 
-    Creator korelaFortress = new Creator(30.122570030590303, 61.030067073282005, KORELA_FORTRESS_ID);
 
-    private static final String LAYER_ID = "layerId", SOURCE_ID = "sourceId";
+    Creator korelaFortress = new Creator(30.122570030590303, 61.030067073282005, KORELA_FORTRESS_ID),
+            tank = new Creator(30.102570030590303, 61.050067073282005, TANK_ID);
+
+    private static final String LAYER_ID = "layerId",
+            SOURCE_ID = "sourceId";
     static final String ICON_ID = "iconId";
 
     static List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
 
-    private ImageButton setHalfStateButton;
-    private BottomSheetBehavior behavior;
-    private WebView web;
     private Button findPriozerskButton;
     private MapView mapView;
     private MapboxMap mapboxMap;
 
-    private CameraPosition currentCameraPosition;
     private double camLat, camLtg;
 
     Point activatedMarker = null;
@@ -66,22 +64,40 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Mapbox.getInstance(this, getString(R.string.access_token));
-        setContentView(R.layout.coordinator_layout);
-
+        setContentView(R.layout.map_layout);
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-        behavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet));
-        behavior.setHalfExpandedRatio((float) 0.7);
-        web = findViewById(R.id.webview);
-        setHalfStateButton = findViewById(R.id.setHalfStateButton);
         findPriozerskButton = findViewById(R.id.findPriozerskButton);
 
         findPriozerskButton.animate().translationY(-200);
-        peekHeight = dpToPx(33);
+
+        hideSystemUI();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+            getWindow().getAttributes().layoutInDisplayCutoutMode =
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        }
+    }
+
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
     @Override
@@ -112,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements
                         mapboxMap.addOnCameraIdleListener(new MapboxMap.OnCameraIdleListener() {
                             @Override
                             public void onCameraIdle() {
-                                updateCoordsOfCamera();
+                                updateCordsOfCamera();
                                 if (checkCamera())
                                     findPriozerskButton.animate().translationY(0).setDuration(100);
                                 else
@@ -120,29 +136,6 @@ public class MainActivity extends AppCompatActivity implements
 
                             }
                         });
-
-                        behavior.addBottomSheetCallback(
-                                new BottomSheetBehavior.BottomSheetCallback() {
-                                    @Override
-                                    public void onStateChanged(View bottomSheet, int newState) {
-                                        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                                            setHalfStateButton.setVisibility(View.VISIBLE);
-                                        }
-                                        else {
-                                            setHalfStateButton.setVisibility(View.INVISIBLE);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                                        if (slideOffset > 0.01)
-                                            findPriozerskButton.setVisibility(View.INVISIBLE);
-                                        else
-                                            findPriozerskButton.setVisibility(View.VISIBLE);
-
-                                    }
-
-                                });
                     }
                 }
         );
@@ -157,12 +150,12 @@ public class MainActivity extends AppCompatActivity implements
     private boolean handleClickIcon(PointF screenPoint) {
         List<Feature> feature = mapboxMap.queryRenderedFeatures(screenPoint, LAYER_ID);
 
-        if (!feature.isEmpty() && behavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            behavior.setPeekHeight(peekHeight, true);
-            behavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
-
-            activatedMarker = (Point) feature.get(0).geometry();
-            setCameraPosition(activatedMarker.latitude() - 0.013, activatedMarker.longitude());
+        if (!feature.isEmpty()) {
+            idOfActivatedMarker = feature.get(0).properties().toString();
+            idOfActivatedMarker = idOfActivatedMarker.substring(11, idOfActivatedMarker.length() - 2);
+            Intent sight = new Intent(this, Sightpoint.class);
+            sight.putExtra("id_of_point", idOfActivatedMarker);
+            startActivity(sight);
             return true;
         }
         else {
@@ -172,22 +165,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void hideInterface() {
-        if (behavior.getPeekHeight() == 0 && activatedMarker != null) {
-            updateCoordsOfCamera();
+        if (activatedMarker != null) {
+            updateCordsOfCamera();
             if (checkCamera() && findPriozerskButton.getTranslationY() == 0.0)
                 findPriozerskButton.animate().translationY(-200).setDuration(100);
             else if (checkCamera()) {
-                behavior.setPeekHeight(peekHeight, true);
                 findPriozerskButton.animate().translationY(0).setDuration(100);
             }
-            else
-                behavior.setPeekHeight(peekHeight, true);
-        }
-
-        else if (behavior.getPeekHeight() == peekHeight) {
-
-            findPriozerskButton.animate().translationY(-200).setDuration(100);
-            behavior.setPeekHeight(0, true);
         }
 
         else if (findPriozerskButton.getTranslationY() == 0.0) {
@@ -195,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         else {
-            updateCoordsOfCamera();
+            updateCordsOfCamera();
             if (checkCamera())
                 findPriozerskButton.animate().translationY(0).setDuration(100);
         }
@@ -216,12 +200,8 @@ public class MainActivity extends AppCompatActivity implements
         findPriozerskButton.animate().translationY(-200).setDuration(100);
     }
 
-    public void setHalfState(View view) {
-        behavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
-    }
-
-    private void updateCoordsOfCamera() {
-        currentCameraPosition = mapboxMap.getCameraPosition();
+    private void updateCordsOfCamera() {
+        CameraPosition currentCameraPosition = mapboxMap.getCameraPosition();
         camLat = currentCameraPosition.target.getLatitude();
         camLtg = currentCameraPosition.target.getLongitude();
     }
@@ -232,9 +212,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private boolean checkCamera() {
-        if (60.9 > camLat || camLat > 61.15 || 29.8 > camLtg || camLtg > 30.2)
-            return true;
-        return false;
+        return 60.9 > camLat || camLat > 61.15 || 29.8 > camLtg || camLtg > 30.2;
     }
 
     @Override
@@ -285,8 +263,8 @@ public class MainActivity extends AppCompatActivity implements
 }
 
 class Creator {
-    private double longitude, latitude;
-    private String id;
+    private final double longitude, latitude;
+    private final String id;
 
     Creator(double longitude, double latitude, String id) {
         this.longitude = longitude;
