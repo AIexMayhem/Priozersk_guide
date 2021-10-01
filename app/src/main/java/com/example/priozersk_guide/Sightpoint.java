@@ -10,7 +10,6 @@ import android.webkit.WebView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Sightpoint extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
