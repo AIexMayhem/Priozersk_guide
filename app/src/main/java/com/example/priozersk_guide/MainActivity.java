@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String KORELA_FORTRESS_ID = "korela", TANK_ID = "tank";
 
 
+
     Creator korelaFortress = new Creator(30.122570030590303, 61.030067073282005, KORELA_FORTRESS_ID),
             tank = new Creator(30.102570030590303, 61.050067073282005, TANK_ID);
 
