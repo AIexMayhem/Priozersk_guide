@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ public class Sightpoint extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sightpoint);
+
         Intent sight = getIntent();
         String idOfActivatedMarker = sight.getStringExtra("id_of_point");
         hideSystemUI();
@@ -23,9 +25,14 @@ public class Sightpoint extends AppCompatActivity {
         }
 
         WebView panorama = findViewById(R.id.Web);
-        panorama.getSettings().setJavaScriptEnabled(true);
-        panorama.loadUrl("http://cy74393.tmweb.ru/" + idOfActivatedMarker + ".html");
-    }@Override
+        WebSettings settings = panorama.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        panorama.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        panorama.loadUrl("http://cy32364.tmweb.ru/" + idOfActivatedMarker + ".html");
+    }
+
+    @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {

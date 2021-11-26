@@ -38,14 +38,20 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 public class MainActivity extends AppCompatActivity implements
         OnMapReadyCallback, MapboxMap.OnMapClickListener {
 
-    private static final String KORELA_FORTRESS_ID = "korela", TANK_ID = "tank";
-
-    Creator korelaFortress = new Creator(30.122570030590303, 61.030067073282005, KORELA_FORTRESS_ID),
-            tank = new Creator(30.102570030590303, 61.050067073282005, TANK_ID);
+    static final String ICON_ID = "iconId", DESCRIPTION = "desc";
+    private static final String KORELA_FORTRESS_ID = "korela", RAILWAY_ID = "railway", KIRHA_FORTRESS_ID = "kirha",
+            BRIDGE_ID = "bridge", CHURCH_ID = "church";
 
     private static final String LAYER_ID = "layerId",
             SOURCE_ID = "sourceId";
-    static final String ICON_ID = "iconId";
+    Creator korelaFortress = new Creator(30.122570030590303, 61.030067073282005, KORELA_FORTRESS_ID,
+            "Корела — каменная крепость в городе Приозерске, " +
+                    "на острове реки Вуоксы, сыгравшая значительную роль в истории Карельского перешейка и допетровской России. " +
+                    "Сохранившиеся помещения крепости в настоящее время занимает историко-краеведческий музей «Крепость Корела»."),
+            railway = new Creator(30.10279, 61.03591, RAILWAY_ID, "sgsdg"),
+            kirhaFortress = new Creator(30.1154, 61.03798, KIRHA_FORTRESS_ID, "sgdgs"),
+            bridge = new Creator(30.15883, 61.04171, BRIDGE_ID, "sgsgdgds"),
+            church = new Creator(30.11393, 61.03561, CHURCH_ID, "sdgsgdsgdsgsdgdsgsdgdgsdsgs");
 
     static List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
 
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements
     private double camLat, camLtg;
 
     Point activatedMarker = null;
-    String idOfActivatedMarker;
+    String dataPoint, idOfActivatedMarker, description;
 
 
     @Override
@@ -149,10 +155,13 @@ public class MainActivity extends AppCompatActivity implements
         List<Feature> feature = mapboxMap.queryRenderedFeatures(screenPoint, LAYER_ID);
 
         if (!feature.isEmpty()) {
-            idOfActivatedMarker = feature.get(0).properties().toString();
-            idOfActivatedMarker = idOfActivatedMarker.substring(11, idOfActivatedMarker.length() - 2);
+            dataPoint = feature.get(0).properties().toString();
+            idOfActivatedMarker = dataPoint.substring(11, dataPoint.indexOf(",") - 1);
+            description = dataPoint.substring(dataPoint.indexOf(",") + 9, dataPoint.length() - 2);
             Intent sight = new Intent(this, Sightpoint.class);
+
             sight.putExtra("id_of_point", idOfActivatedMarker);
+            sight.putExtra("desc", description);
             startActivity(sight);
             return true;
         }
@@ -263,11 +272,13 @@ public class MainActivity extends AppCompatActivity implements
 class Creator {
     private final double longitude, latitude;
     private final String id;
+    public String description;
 
-    Creator(double longitude, double latitude, String id) {
+    Creator(double longitude, double latitude, String id, String description) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.id = id;
+        this.description = description;
         addPointToList();
     }
 
@@ -275,6 +286,8 @@ class Creator {
         Feature singleFeature = Feature.fromGeometry(
                 Point.fromLngLat(longitude, latitude));
         singleFeature.addStringProperty(MainActivity.ICON_ID, id);
+        singleFeature.addStringProperty(MainActivity.DESCRIPTION, description);
         MainActivity.symbolLayerIconFeatureList.add(singleFeature);
     }
+
 }
