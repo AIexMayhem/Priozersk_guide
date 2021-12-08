@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
 
     android:background="@android:color/transparent"
-    tools:context=".MainActivity">
+    tools:context=".Map">
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
@@ -14,19 +14,49 @@
         android:layout_height="match_parent"
         mapbox:mapbox_cameraTargetLat="61.0362"
         mapbox:mapbox_cameraTargetLng="30.1132"
-        mapbox:mapbox_cameraZoom="12.5" >
-    </com.mapbox.mapboxsdk.maps.MapView>
+        mapbox:mapbox_cameraZoom="12.5" />
 
-    <Button
-        android:id="@+id/findPriozerskButton"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@drawable/shape_oval"
-        android:onClick="setDefaultCameraPosition"
-        android:paddingHorizontal="10dp"
-        android:text="@string/find_Priozersk"
-        android:textColor="@color/black"
-        android:textSize="9sp" />
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/openBar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_oval2"
+            android:onClick="OpenBar"
+            android:text="| | |"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/findPriozerskButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_oval2"
+            android:fontFamily="@font/pacificoregular"
+            android:onClick="setDefaultCameraPosition"
+            android:paddingHorizontal="10dp"
+            android:text="Найти Приозерск"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/returnToMainMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_oval2"
+            android:fontFamily="@font/pacificoregular"
+            android:onClick="returnToMainMenu"
+            android:paddingHorizontal="10dp"
+            android:text="В Меню"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+    </LinearLayout>
 
 </FrameLayout>

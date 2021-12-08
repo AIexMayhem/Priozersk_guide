@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -35,7 +34,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 
-public class MainActivity extends AppCompatActivity implements
+public class Map extends AppCompatActivity implements
         OnMapReadyCallback, MapboxMap.OnMapClickListener {
 
     static final String ICON_ID = "iconId", DESCRIPTION = "desc";
@@ -45,25 +44,32 @@ public class MainActivity extends AppCompatActivity implements
     private static final String LAYER_ID = "layerId",
             SOURCE_ID = "sourceId";
     Creator korelaFortress = new Creator(30.122570030590303, 61.030067073282005, KORELA_FORTRESS_ID,
-            "Корела — каменная крепость в городе Приозерске, " +
+            "    Корела — каменная крепость в городе Приозерске, " +
                     "на острове реки Вуоксы, сыгравшая значительную роль в истории Карельского перешейка и допетровской России. " +
-                    "Сохранившиеся помещения крепости в настоящее время занимает историко-краеведческий музей «Крепость Корела»."),
-            railway = new Creator(30.10279, 61.03591, RAILWAY_ID, "sgsdg"),
+                    "Сохранившиеся помещения крепости в настоящее время занимает историко-краеведческий музей «Крепость Корела».\n" +
+                    "   Корела — каменная крепость в городе Приозерске, " +
+                    "на острове реки Вуоксы, сыгравшая значительную роль в истории Карельского перешейка и допетровской России.\n" +
+                    "   Сохранившиеся помещения крепости в настоящее время занимает историко-краеведческий музей «Крепость Корела»."),
+            railway = new Creator(30.10279, 61.03591, RAILWAY_ID, "Приозерский вокзал — станция Октябрьской железной дороги, в городе Приозерск Ленинградской области.\n" +
+                    "   Здание железнодорожного вокзала является выявленным объектом культурного наследия народов России.\n" +
+                    "Впервые предложение о строительстве железной дороги, которая проходила бы через Кексгольм, " +
+                    "поступило в 1887 году от помещика Финляндского княжества из Сумпула.\n" +
+                    "Станция введена в промышленную эксплуатацию и открыта для пассажиров и перевозки грузов в 1916 году. " +
+                    "Железная дорога от Санкт-Петербурга до Хийтолы (179 км.) была построена компанией «Suomen Valtion Rautatiet» и полностью введена в эксплуатацию к началу 1917 года.\n" +
+                    "С 1918 по 1948 год станция именовалась как Кякисалми. Также, с 1916 по 1948 год использовалось и шведское название — Кексгольм. " +
+                    "С 1918 по 1940 годы станция и город находились в составе Финляндии[2].\n" +
+                    "Электрифицирована в 1975—1976 годах, в составе участка Сосново — Приозерск — Кузнечное."
+            ),
             kirhaFortress = new Creator(30.1154, 61.03798, KIRHA_FORTRESS_ID, "sgdgs"),
             bridge = new Creator(30.15883, 61.04171, BRIDGE_ID, "sgsgdgds"),
             church = new Creator(30.11393, 61.03561, CHURCH_ID, "sdgsgdsgdsgsdgdsgsdgdgsdsgs");
 
     static List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
-
-    private Button findPriozerskButton;
+    int cnt = 0;
     private MapView mapView;
     private MapboxMap mapboxMap;
-
-    private double camLat, camLtg;
-
-    Point activatedMarker = null;
+    private Button findPriozerskButton, openBar, toMenu;
     String dataPoint, idOfActivatedMarker, description;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +81,10 @@ public class MainActivity extends AppCompatActivity implements
         mapView.getMapAsync(this);
 
         findPriozerskButton = findViewById(R.id.findPriozerskButton);
-
-        findPriozerskButton.animate().translationY(-200);
+        openBar = findViewById(R.id.openBar);
+        toMenu = findViewById(R.id.returnToMainMenu);
+        findPriozerskButton.animate().translationY(-200).setDuration(0);
+        toMenu.animate().translationY(-200).setDuration(0);
 
         hideSystemUI();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
@@ -109,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements
         mapboxMap.setStyle(new Style.Builder().fromUri(getString(R.string.map_url))
 
                 .withImage(ICON_ID, BitmapFactory.decodeResource(
-                        MainActivity.this.getResources(), R.drawable.mapbox_marker_icon_default))
+                        Map.this.getResources(), R.drawable.mapbox_marker_icon_default))
 
                 .withSource(new GeoJsonSource(SOURCE_ID,
                         FeatureCollection.fromFeatures(symbolLayerIconFeatureList)))
@@ -124,22 +132,12 @@ public class MainActivity extends AppCompatActivity implements
 
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
-                        MainActivity.this.mapboxMap = mapboxMap;
+                        Map.this.mapboxMap = mapboxMap;
 
                         mapboxMap.getUiSettings().setCompassEnabled(false);
 
-                        mapboxMap.addOnMapClickListener(MainActivity.this);
-                        mapboxMap.addOnCameraIdleListener(new MapboxMap.OnCameraIdleListener() {
-                            @Override
-                            public void onCameraIdle() {
-                                updateCordsOfCamera();
-                                if (checkCamera())
-                                    findPriozerskButton.animate().translationY(0).setDuration(100);
-                                else
-                                    findPriozerskButton.animate().translationY(-200).setDuration(100);
+                        mapboxMap.addOnMapClickListener(Map.this);
 
-                            }
-                        });
                     }
                 }
         );
@@ -165,32 +163,10 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(sight);
             return true;
         }
-        else {
-            hideInterface();
-        }
+
         return false;
     }
 
-    private void hideInterface() {
-        if (activatedMarker != null) {
-            updateCordsOfCamera();
-            if (checkCamera() && findPriozerskButton.getTranslationY() == 0.0)
-                findPriozerskButton.animate().translationY(-200).setDuration(100);
-            else if (checkCamera()) {
-                findPriozerskButton.animate().translationY(0).setDuration(100);
-            }
-        }
-
-        else if (findPriozerskButton.getTranslationY() == 0.0) {
-            findPriozerskButton.animate().translationY(-200).setDuration(100);
-        }
-
-        else {
-            updateCordsOfCamera();
-            if (checkCamera())
-                findPriozerskButton.animate().translationY(0).setDuration(100);
-        }
-    }
 
     private void setCameraPosition(double latitude, double longitude) {
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(
@@ -205,22 +181,10 @@ public class MainActivity extends AppCompatActivity implements
     public void setDefaultCameraPosition(View view) {
         setCameraPosition(61.0362, 30.1132);
         findPriozerskButton.animate().translationY(-200).setDuration(100);
+        toMenu.animate().translationY(-200).setDuration(100);
+        cnt = 1 - cnt;
     }
 
-    private void updateCordsOfCamera() {
-        CameraPosition currentCameraPosition = mapboxMap.getCameraPosition();
-        camLat = currentCameraPosition.target.getLatitude();
-        camLtg = currentCameraPosition.target.getLongitude();
-    }
-
-    private int dpToPx(int dp) {
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
-    }
-
-    private boolean checkCamera() {
-        return 60.9 > camLat || camLat > 61.15 || 29.8 > camLtg || camLtg > 30.2;
-    }
 
     @Override
     public void onResume() {
@@ -267,6 +231,24 @@ public class MainActivity extends AppCompatActivity implements
         mapView.onSaveInstanceState(outState);
     }
 
+    public void OpenBar(View view) {
+        if (cnt == 0) {
+
+            findPriozerskButton.animate().translationY(0).setDuration(200);
+            toMenu.animate().translationY(0).setDuration(200);
+            openBar.setRotation(180);
+        } else {
+            openBar.setRotation(90);
+            findPriozerskButton.animate().translationY(-600).setDuration(200);
+            toMenu.animate().translationY(-600).setDuration(200);
+        }
+        cnt = 1 - cnt;
+    }
+
+    public void returnToMainMenu(View view) {
+        Intent sight = new Intent(this, MainMenu.class);
+        startActivity(sight);
+    }
 }
 
 class Creator {
@@ -285,9 +267,9 @@ class Creator {
     private void addPointToList() {
         Feature singleFeature = Feature.fromGeometry(
                 Point.fromLngLat(longitude, latitude));
-        singleFeature.addStringProperty(MainActivity.ICON_ID, id);
-        singleFeature.addStringProperty(MainActivity.DESCRIPTION, description);
-        MainActivity.symbolLayerIconFeatureList.add(singleFeature);
+        singleFeature.addStringProperty(Map.ICON_ID, id);
+        singleFeature.addStringProperty(Map.DESCRIPTION, description);
+        Map.symbolLayerIconFeatureList.add(singleFeature);
     }
 
 }

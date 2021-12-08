@@ -3,5 +3,7 @@
     <string name="find_Priozersk">Найти\nПриозерск</string>
     <string name="access_token" translatable="false">pk.eyJ1IjoiYWxleG1heWhlbSIsImEiOiJja2o5dXMwajYxYjlrMnVtdDE1ZGJseXRnIn0.QnVLLb94m41ySygaEY5LGw</string>
     <string name="map_url" translatable="false">mapbox://styles/alexmayhem/ckk9zdd0c0tvw17od4a9grx1m</string>
+    <string name="title_activity_main_menu">MainMenu</string>
+
 
 </resources>
