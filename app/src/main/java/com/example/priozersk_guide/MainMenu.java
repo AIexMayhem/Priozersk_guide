@@ -23,7 +23,7 @@ public class MainMenu extends AppCompatActivity {
             "В 1941—1944 годах во время советско-финской войны город был занят войсками Финляндии и назывался Кякисалми. " +
             "В 1944 году после Московского перемирия город вторично отошёл к Советскому Союзу. В 1948 году был переименован в Приозерск.",
 
-    text2 = "Информация взята из источника www.wikipedia.org";
+    text2 = "Информация взята из источников wikipedia.org, paperpaper.ru и globus.aquaviva.ru";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

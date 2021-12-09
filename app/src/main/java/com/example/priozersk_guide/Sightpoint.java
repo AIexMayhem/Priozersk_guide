@@ -98,7 +98,7 @@ public class Sightpoint extends AppCompatActivity {
     public void OpenTextBar(View view) {
         if (cnt2 == 0) {
             textBar.animate().translationY(0).setDuration(200);
-            closeText.animate().translationY(5).setDuration(200);
+            closeText.animate().translationY(-8).setDuration(200);
 
         } else {
             textBar.animate().translationY(-1000).setDuration(200);
