@@ -18,13 +18,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="25dp"
-            android:fontFamily="@font/marks"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/pattaya"
             android:text="ВИРТУАЛЬНЫЙ ТУР ПО ГОРОДУ ПРИОЗЕРСКУ"
             android:textSize="28sp"
             android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
+            android:textColor="@color/black" />
 
         <View
             android:layout_width="match_parent"
@@ -64,7 +63,7 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/pacificoregular"
             android:onClick="aboutTown"
-            android:text="О ПРИОЗЕРСКЕ"
+            android:text="ИСТОРИЯ ПРИОЗЕРСКА"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
