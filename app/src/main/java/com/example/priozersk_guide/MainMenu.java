@@ -64,11 +64,12 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void aboutTown(View view) {
+
         if (cnt2 == 0 && cnt1 == 0)
             textBar.setText(text1);
-        else if (cnt1 == 1)
+        else if (cnt1 == 1) {
             textBar.setText("");
-        else if (cnt2 == 1) {
+        } else if (cnt2 == 1) {
             textBar.setText(text1);
             cnt2 = 0;
         }

@@ -126,6 +126,7 @@ public class Map extends AppCompatActivity implements
 
         findPriozerskButton = findViewById(R.id.findPriozerskButton);
         openBar = findViewById(R.id.openBar);
+        openBar.setRotation(90);
         toMenu = findViewById(R.id.returnToMainMenu);
         findPriozerskButton.animate().translationY(-200).setDuration(0);
         toMenu.animate().translationY(-200).setDuration(0);
@@ -197,6 +198,11 @@ public class Map extends AppCompatActivity implements
         List<Feature> feature = mapboxMap.queryRenderedFeatures(screenPoint, LAYER_ID);
 
         if (!feature.isEmpty()) {
+            findPriozerskButton.animate().translationY(-200).setDuration(0);
+            toMenu.animate().translationY(-200).setDuration(0);
+            openBar.setRotation(90);
+            cnt = 1 - cnt;
+
             dataPoint = feature.get(0).properties().toString();
             idOfActivatedMarker = dataPoint.substring(11, dataPoint.indexOf(",") - 1);
             description = dataPoint.substring(dataPoint.indexOf(",") + 9, dataPoint.length() - 2);
@@ -226,6 +232,8 @@ public class Map extends AppCompatActivity implements
         setCameraPosition(61.0362, 30.1132);
         findPriozerskButton.animate().translationY(-200).setDuration(100);
         toMenu.animate().translationY(-200).setDuration(100);
+
+        openBar.setRotation(90);
         cnt = 1 - cnt;
     }
 

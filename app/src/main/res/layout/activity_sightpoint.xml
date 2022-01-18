@@ -86,7 +86,7 @@
                 android:onClick="closeText"
                 android:text="x"
                 android:textColor="@color/black"
-                android:textSize="9sp"></Button>
+                android:textSize="9sp" />
         </LinearLayout>
     </LinearLayout>
 

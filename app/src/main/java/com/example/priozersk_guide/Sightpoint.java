@@ -40,7 +40,7 @@ public class Sightpoint extends AppCompatActivity {
 
         textBar.animate().translationY(-1000).setDuration(0);
         closeText.animate().translationX(-100).setDuration(0);
-        closeText.animate().translationY(-1000).setDuration(0);
+        closeText.animate().translationY(-950).setDuration(0);
         openTextBar.animate().translationY(-600).setDuration(0);
         returnToMap.animate().translationY(-600).setDuration(0);
 
@@ -104,11 +104,13 @@ public class Sightpoint extends AppCompatActivity {
             textBar.animate().translationY(-1000).setDuration(200);
             closeText.animate().translationY(-1000).setDuration(200);
 
+
         }
         openTextBar.animate().translationY(-600).setDuration(200);
         returnToMap.animate().translationY(-600).setDuration(200);
         openBar.setRotation(90);
         cnt2 = 1 - cnt2;
+        cnt = 1 - cnt;
     }
 
     public void returnToMainScreen(View view) {
