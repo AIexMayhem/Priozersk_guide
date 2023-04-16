@@ -58,7 +58,7 @@ public class Sightpoint extends AppCompatActivity {
 
         String idOfActivatedMarker = landmark.getStringExtra("id_of_point");
         String description = landmark.getStringExtra("desc");
-        panorama.loadUrl("http://cy32364.tmweb.ru/" + idOfActivatedMarker + ".html");
+        panorama.loadUrl("http://cs19351.tw1.ru/" + idOfActivatedMarker + ".html");
         textBar.setText(description);
     }
 
