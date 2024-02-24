@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".Sightpoint">
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/Web" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/openBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/shape_oval2"
+                android:onClick="OpenBar"
+                android:text="| | |"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/openTextBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/shape_oval2"
+                android:fontFamily="@font/pacificoregular"
+                android:onClick="OpenTextBar"
+                android:paddingHorizontal="10dp"
+                android:text="Описание"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/returnToMainScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/shape_oval2"
+                android:fontFamily="@font/pacificoregular"
+                android:onClick="returnToMainScreen"
+                android:paddingHorizontal="10dp"
+                android:text="К карте"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/TextBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/shape_oval"
+                android:fontFamily="@font/pacificoregular"
+                android:maxHeight="150dp"
+                android:paddingHorizontal="15dp"
+                android:scrollbarThumbVertical="@android:color/transparent"
+                android:scrollbars="vertical"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/close"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/shape_oval"
+                android:onClick="closeText"
+                android:text="x"
+                android:textColor="@color/black"
+                android:textSize="9sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

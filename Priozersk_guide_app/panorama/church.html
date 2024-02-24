@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, shrink-to-fit=no">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<script src="panolens.min.js"></script>
+
+<div id="panolens-separate-container"></div>
+
+<script>
+  const panorama = new PANOLENS.ImagePanorama( 'https://downloader.disk.yandex.ru/preview/c1853d89d1bdf617cc5c707ab7efad28ede463fc99991449b3c0f7322ba63315/619f93b2/qKS9hPpscD8m6s0n8obbTi7BdM8F-sYU0IoNuxVsDGILtqOUia_EA8trqeBs4jnfdo98HRLao_ohop7mTEBEwQ%3D%3D?uid=0&filename=pano_center_dji.JPG&disposition=inline&hash=&limit=0&content_type=image%2Fjpeg&owner_uid=0&tknv=v2&size=1920x969' );
+  const viewer = new PANOLENS.Viewer();
+  viewer.add( panorama );
+</script>
+
+</body>
+</html>
